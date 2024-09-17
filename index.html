@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Розклад уроків 8-Г</title>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Розклад 8-Г" />
+    <meta property="og:description" content="Розклад уроків для 8-Г класу" />
+    <meta property="og:url" content="https://kiril-donec.github.io/rozklad/" />
+    <meta property="og:type" content="website" />
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -63,28 +71,32 @@
             color: #007bff;
         }
 
-        .schedule {
+        .schedule-wrapper {
             position: relative;
             opacity: 0;
+            /* Початково приховуємо всі розклади */
             transition: opacity 0.5s ease;
         }
 
-        .schedule.active {
+        .schedule-wrapper.active {
             opacity: 1;
         }
 
-        .schedule.slide-in-left {
-            animation: slide-in-left 0.5s ease;
+        .schedule-wrapper.slide-in-left {
+            animation: slide-in-left 0.3s ease-in-out;
+            /* Змінено тривалість та easing */
         }
 
-        .schedule.slide-in-right {
-            animation: slide-in-right 0.5s ease;
+        .schedule-wrapper.slide-in-right {
+            animation: slide-in-right 0.3s ease-in-out;
+            /* Змінено тривалість та easing */
         }
 
         @keyframes slide-in-left {
             from {
                 transform: translateX(-100%);
             }
+
             to {
                 transform: translateX(0);
             }
@@ -94,15 +106,30 @@
             from {
                 transform: translateX(100%);
             }
+
             to {
                 transform: translateX(0);
             }
         }
 
-        .schedule th, .schedule td {
+        .schedule {
+            width: 100%;
+            /* Розклад займає всю ширину контейнера */
+            table-layout: fixed;
+            /* Фіксована ширина стовпців */
+        }
+
+        .schedule th,
+        .schedule td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
+            overflow: hidden;
+            /* Приховуємо текст, що виходить за межі комірки */
+            text-overflow: ellipsis;
+            /* Додаємо три крапки в кінці тексту */
+            white-space: nowrap;
+            /* Забороняємо перенос тексту на новий рядок */
         }
 
         .schedule th {
@@ -144,23 +171,24 @@
         }
 
         /* Bell Schedule Styling */
-        .bell-schedule th, .bell-schedule td {
-            text-align: center; 
+        .bell-schedule th,
+        .bell-schedule td {
+            text-align: center;
         }
 
-        .bell-schedule th:nth-child(1), 
-        .bell-schedule td:nth-child(1) { 
-            width: 20%; 
+        .bell-schedule th:nth-child(1),
+        .bell-schedule td:nth-child(1) {
+            width: 20%;
         }
 
-        .bell-schedule th:nth-child(2), 
-        .bell-schedule td:nth-child(2) { 
-            width: 50%; 
+        .bell-schedule th:nth-child(2),
+        .bell-schedule td:nth-child(2) {
+            width: 50%;
         }
 
-        .bell-schedule th:nth-child(3), 
-        .bell-schedule td:nth-child(3) { 
-            width: 30%; 
+        .bell-schedule th:nth-child(3),
+        .bell-schedule td:nth-child(3) {
+            width: 30%;
         }
 
         /* Адаптація під мобільні пристрої */
@@ -178,17 +206,105 @@
                 margin-bottom: 10px;
             }
 
-            .schedule th, .schedule td {
-                padding: 8px;
+            .schedule th,
+            .schedule td {
+                padding: 5px;
+                /* Зменшено відступи */
+                font-size: 0.9em;
+                /* Зменшено розмір шрифту */
             }
+
+            .lesson-list li span {
+                padding: 3px 5px;
+                /* Зменшено відступи */
+                font-size: 0.8em;
+                /* Зменшено розмір шрифту */
+            }
+
+            .lesson-list li:before {
+                margin-right: 5px;
+                /* Зменшено відступ */
+                font-size: 0.8em;
+                /* Зменшено розмір шрифту */
+            }
+        }
+
+        /* Стиль для пунктів A, B */
+        .lesson-list {
+            text-align: center;
+            /* Вирівнювання по центру */
+            display: flex;
+            /* Використовуємо flexbox */
+            flex-direction: column;
+            /* Елементи розташовуються один під одним */
+            align-items: center;
+            /* Вирівнювання по центру горизонтально */
+        }
+
+        .lesson-list li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            /* Вирівнювання по центру вертикально */
+        }
+
+        .lesson-list li span {
+            padding: 5px 10px;
+            border-radius: 5px;
+            /* Закруглені кути */
+        }
+
+        .lesson-list li span:first-child {
+            color: #fff;
+            /* Білий текст */
+            background-color: #007bff;
+            /* Синій фон */
+            margin-right: 5px;
+            /* Невеликий відступ справа */
+        }
+
+        .lesson-list li span:last-child {
+            color: #fff;
+            /* Білий текст */
+            background-color: #28a745;
+            /* Зелений фон */
+        }
+
+        .lesson-list li:before {
+            content: "ДС";
+            /* Додаємо "ДС" */
+            font-weight: bold;
+            /* Робимо "ДС" жирним */
+            margin-right: 10px;
+            /* Відступ справа */
+        }
+
+        /* Стиль для роздільників між розкладами у вкладці "Всі" */
+        #all .schedule-separator {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Стиль для назви дня у вкладці "Всі" */
+        #all .day-name {
+            background-color: #f8f9fa;
+            /* Світло-сірий фон */
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            /* Невеликий відступ знизу */
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Розклад уроків 8-Г</h1>
         <div class="tabs">
-            <div class="tab active" data-target="monday">Понеділок</div>
+            <div class="tab active" data-target="all">Всі</div>
+            <div class="tab" data-target="monday">Понеділок</div>
             <div class="tab" data-target="tuesday">Вівторок</div>
             <div class="tab" data-target="wednesday">Середа</div>
             <div class="tab" data-target="thursday">Четвер</div>
@@ -196,21 +312,23 @@
             <div class="tab" data-target="bell-schedule">Дзвінки</div>
         </div>
 
-        <div id="monday" class="schedule active"></div>
-        <div id="tuesday" class="schedule"></div>
-        <div id="wednesday" class="schedule"></div>
-        <div id="thursday" class="schedule"></div>
-        <div id="friday" class="schedule"></div>
-        <div id="bell-schedule" class="schedule"></div>
+        <div id="all" class="schedule-wrapper active"></div>
+        <div id="monday" class="schedule-wrapper"></div>
+        <div id="tuesday" class="schedule-wrapper"></div>
+        <div id="wednesday" class="schedule-wrapper"></div>
+        <div id="thursday" class="schedule-wrapper"></div>
+        <div id="friday" class="schedule-wrapper"></div>
+        <div id="bell-schedule" class="schedule-wrapper"></div>
     </div>
 
     <script>
         const tabs = document.querySelectorAll('.tab');
-        const schedules = document.querySelectorAll('.schedule');
+        const scheduleWrappers = document.querySelectorAll('.schedule-wrapper');
 
         // Функція для створення таблиці розкладу
-        function createScheduleTable(data) {
+        function createScheduleTable(data, dayName) {
             const table = document.createElement('table');
+            table.classList.add('schedule');
             const thead = table.createTHead();
             const tbody = table.createTBody();
             const headerRow = thead.insertRow();
@@ -218,17 +336,52 @@
             headerRow.insertCell().textContent = 'Предмет';
             headerRow.insertCell().textContent = 'Час';
 
-            data.forEach(lesson => {
-                const row = tbody.insertRow();
-                row.insertCell().textContent = lesson.lesson;
-                const subjectCell = row.insertCell();
-                if (lesson.ds) {
-                    subjectCell.innerHTML = `<span class="ds-label">ДС</span> ${lesson.subject}`;
-                } else {
-                    subjectCell.textContent = lesson.subject;
+            let lessonCounter = 1; // Лічильник уроків
+            let firstLessonFound = false; // Прапорець, що вказує, чи знайдено перший урок
+
+            data.forEach((lesson, index) => {
+                if (lesson.subject !== "" && !firstLessonFound) {
+                    lessonCounter = index + 1; // Встановлюємо початкове значення лічильника
+                    firstLessonFound = true;
                 }
-                row.insertCell().textContent = lesson.time;
+                
+                if (firstLessonFound) {
+                    const row = tbody.insertRow();
+                    row.insertCell().textContent = lessonCounter; // Використовуємо лічильник уроків
+                    const subjectCell = row.insertCell();
+
+                    if (lesson.subject.includes("A:") && lesson.subject.includes("B:")) {
+                        // Гарне форматування для A, B з ДС
+                        const list = document.createElement('ul');
+                        list.classList.add('lesson-list');
+                        const parts = lesson.subject.split('\n');
+                        parts.forEach(part => {
+                            const li = document.createElement('li');
+                            const [group, subject] = part.split(':').map(s => s.trim());
+                            li.innerHTML = `<span>${group}</span> <span>${subject.replace("ДС ", "")}</span>`; // Видалення "ДС "
+                            list.appendChild(li);
+                        });
+                        subjectCell.appendChild(list);
+                    } else if (lesson.ds) {
+                        subjectCell.innerHTML = `<span class="ds-label">ДС</span> ${lesson.subject}`;
+                    } else {
+                        subjectCell.textContent = lesson.subject;
+                    }
+                    row.insertCell().textContent = lesson.time;
+                    lessonCounter++;
+                }
             });
+
+            // Додавання назви дня
+            if (dayName) {
+                const dayNameRow = table.insertRow(0);
+                const dayNameCell = dayNameRow.insertCell();
+                dayNameCell.colSpan = 3; // Об'єднання стовпців
+                dayNameCell.textContent = dayName;
+                dayNameCell.style.textAlign = "center";
+                dayNameCell.style.fontWeight = "bold";
+                dayNameRow.classList.add('day-name'); // Додавання класу для ігнорування в updateCurrentLessonInfo
+            }
 
             return table;
         }
@@ -236,7 +389,7 @@
         // Функція для створення таблиці розкладу дзвінків
         function createBellScheduleTable(data) {
             const table = document.createElement('table');
-            table.classList.add('bell-schedule'); // Add class for styling
+            table.classList.add('schedule', 'bell-schedule');
             const thead = table.createTHead();
             const tbody = table.createTBody();
             const headerRow = thead.insertRow();
@@ -259,101 +412,150 @@
             .then(response => response.json())
             .then(data => {
                 // Створення таблиць розкладу для кожного дня
-                document.getElementById('monday').appendChild(createScheduleTable(data.monday));
-                document.getElementById('tuesday').appendChild(createScheduleTable(data.tuesday));
-                document.getElementById('wednesday').appendChild(createScheduleTable(data.wednesday));
-                document.getElementById('thursday').appendChild(createScheduleTable(data.thursday));
-                document.getElementById('friday').appendChild(createScheduleTable(data.friday));
-
-                // Створення таблиці розкладу дзвінків
+                document.getElementById('monday').appendChild(createScheduleTable(data.monday, "Понеділок"));
+                document.getElementById('tuesday').appendChild(createScheduleTable(data.tuesday, "Вівторок"));
+                document.getElementById('wednesday').appendChild(createScheduleTable(data.wednesday, "Середа"));
+                document.getElementById('thursday').appendChild(createScheduleTable(data.thursday, "Четвер"));
+                document.getElementById('friday').appendChild(createScheduleTable(data.friday, "П'ятниця"));
                 document.getElementById('bell-schedule').appendChild(createBellScheduleTable(data.bellSchedule));
+
+                // Створення розкладу для вкладки "Всі"
+                const allSchedule = document.getElementById('all');
+                allSchedule.appendChild(createScheduleTable(data.monday, "Понеділок"));
+                allSchedule.appendChild(document.createElement('div')).classList.add('schedule-separator');
+                allSchedule.appendChild(createScheduleTable(data.tuesday, "Вівторок"));
+                allSchedule.appendChild(document.createElement('div')).classList.add('schedule-separator');
+                allSchedule.appendChild(createScheduleTable(data.wednesday, "Середа"));
+                allSchedule.appendChild(document.createElement('div')).classList.add('schedule-separator');
+                allSchedule.appendChild(createScheduleTable(data.thursday, "Четвер"));
+                allSchedule.appendChild(document.createElement('div')).classList.add('schedule-separator');
+                allSchedule.appendChild(createScheduleTable(data.friday, "П'ятниця"));
+                allSchedule.appendChild(document.createElement('div')).classList.add('schedule-separator');
+                allSchedule.appendChild(createBellScheduleTable(data.bellSchedule)); // Додано розклад дзвінків
 
                 // Визначення поточного дня тижня
                 const currentDay = new Date().getDay();
-                let defaultTab = 'monday';
+                let defaultTab = 'all'; // За замовчуванням показуємо вкладку "Всі"
 
                 if (currentDay === 0 || currentDay === 6) {
-                    // Якщо субота або неділя, показуємо понеділок
+                    // Якщо субота або неділя, показуємо вкладку "Всі"
                 } else {
                     switch (currentDay) {
-                        case 1: defaultTab = 'monday'; break;
-                        case 2: defaultTab = 'tuesday'; break;
-                        case 3: defaultTab = 'wednesday'; break;
-                        case 4: defaultTab = 'thursday'; break;
-                        case 5: defaultTab = 'friday'; break;
+                        case 1:
+                            defaultTab = 'monday';
+                            break;
+                        case 2:
+                            defaultTab = 'tuesday';
+                            break;
+                        case 3:
+                            defaultTab = 'wednesday';
+                            break;
+                        case 4:
+                            defaultTab = 'thursday';
+                            break;
+                        case 5:
+                            defaultTab = 'friday';
+                            break;
                     }
                 }
 
                 // Активація вкладки поточного дня при завантаженні сторінки
                 document.querySelector(`.tab[data-target="${defaultTab}"]`).click();
-
-                function updateCurrentLessonInfo() {
-                    const now = new Date();
-                    const currentHour = now.getHours();
-                    const currentMinute = now.getMinutes();
-
-                    const activeSchedule = document.querySelector('.schedule.active');
-                    const lessons = activeSchedule.querySelectorAll('tbody tr');
-                    let lessonsEnded = true; 
-
-                    lessons.forEach(lesson => {
-                        lesson.classList.remove('current-lesson');
-                        const timeParts = lesson.querySelector('td:last-child').textContent.split(' - ');
-
-                        if (timeParts.length === 2) {
-                            const startHour = parseInt(timeParts[0].split(':')[0]);
-                            const startMinute = parseInt(timeParts[0].split(':')[1]);
-                            const endHour = parseInt(timeParts[1].split(':')[0]);
-                            const endMinute = parseInt(timeParts[1].split(':')[1]);
-
-                            if (currentHour >= startHour && currentMinute >= startMinute && currentHour <= endHour && currentMinute <= endMinute) {
-                                lesson.classList.add('current-lesson');
-                                lessonsEnded = false;
-
-                                const timeLeft = (endHour - currentHour) * 60 + (endMinute - currentMinute);
-                                lesson.querySelector('td:last-child').textContent += ` (закінчиться через ${timeLeft} хв)`;
-                            } else if (currentHour >= startHour && currentHour <= endHour) {
-                                lessonsEnded = false;
-                                const timeUntilNextLesson = (startHour - currentHour) * 60 + (startMinute - currentMinute);
-                                const breakInfoRow = document.createElement('tr');
-                                breakInfoRow.classList.add('break-info');
-                                breakInfoRow.innerHTML = `<td colspan="3">Зараз перерва, залишилось ${timeUntilNextLesson} хв</td>`;
-                                lesson.parentNode.insertBefore(breakInfoRow, lesson);
-                            }
-                        }
-                    });
-
-                    if (lessonsEnded && activeSchedule.id !== 'bell-schedule') {
-                        const noLessonsRow = document.createElement('tr');
-                        noLessonsRow.classList.add('no-lessons');
-                        noLessonsRow.innerHTML = `<td colspan="3">Уроки на сьогодні закінчилися</td>`;
-                        activeSchedule.querySelector('tbody').appendChild(noLessonsRow);
-                    }
-                }
-
-                setInterval(updateCurrentLessonInfo, 60000);
             });
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const target = tab.dataset.target;
-                const currentActive = document.querySelector('.schedule.active');
+
+                // Приховуємо всі розклади перед відображенням нового
+                scheduleWrappers.forEach(s => {
+                    s.classList.remove('active', 'slide-in-left', 'slide-in-right');
+                    s.style.display = 'none';
+                });
+
+                // Знаходимо розклад, який потрібно відобразити
                 const newActive = document.getElementById(target);
 
+                // Змінюємо активну вкладку
                 tabs.forEach(t => t.classList.remove('active'));
-                schedules.forEach(s => s.classList.remove('active', 'slide-in-left', 'slide-in-right'));
-
                 tab.classList.add('active');
 
-                if (schedules.indexOf(newActive) > schedules.indexOf(currentActive)) {
-                    newActive.classList.add('active', 'slide-in-right');
-                } else {
-                    newActive.classList.add('active', 'slide-in-left');
-                }
+                // Відображаємо новий розклад
+                newActive.style.display = 'block';
 
-                updateCurrentLessonInfo();
+                // Додаємо анімацію 
+                setTimeout(() => {
+                    // Використовуємо Array.from() для перетворення NodeList в масив
+                    const currentIndex = Array.from(scheduleWrappers).indexOf(newActive);
+                    const prevIndex = Array.from(scheduleWrappers).indexOf(document.querySelector('.schedule-wrapper.active'));
+
+                    if (currentIndex > prevIndex) {
+                        newActive.classList.add('slide-in-right');
+                    } else {
+                        newActive.classList.add('slide-in-left');
+                    }
+
+                    // Додавання класу 'active' після завершення анімації
+                    newActive.addEventListener('animationend', () => {
+                        newActive.classList.add('active');
+                        updateCurrentLessonInfo(); // Оновлення інформації про урок/перерву
+                    }, { once: true }); // Виконати обробник події тільки один раз
+                }, 0); // Затримка для коректної роботи анімації 
             });
         });
+
+        // Оновлення інформації про поточний урок/перерву кожну хвилину
+        setInterval(updateCurrentLessonInfo, 60000);
+
+        function updateCurrentLessonInfo() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const activeScheduleWrapper = document.querySelector('.schedule-wrapper.active');
+            const lessons = activeScheduleWrapper.querySelectorAll('.schedule tbody tr:not(.day-name)');
+            let lessonsEnded = true;
+
+            // Видалення старих повідомлень
+            activeScheduleWrapper.querySelectorAll('.break-info').forEach(row => row.remove());
+            activeScheduleWrapper.querySelectorAll('.no-lessons').forEach(row => row.remove());
+
+            lessons.forEach(lesson => {
+                lesson.classList.remove('current-lesson');
+                const timeParts = lesson.querySelector('td:last-child').textContent.split(' - ');
+
+                if (timeParts.length === 2) {
+                    const startHour = parseInt(timeParts[0].split(':')[0]);
+                    const startMinute = parseInt(timeParts[0].split(':')[1]);
+                    const endHour = parseInt(timeParts[1].split(':')[0]);
+                    const endMinute = parseInt(timeParts[1].split(':')[1]);
+
+                    if (currentHour >= startHour && currentMinute >= startMinute && currentHour <= endHour && currentMinute <= endMinute) {
+                        lesson.classList.add('current-lesson');
+                        lessonsEnded = false;
+
+                        const timeLeft = (endHour - currentHour) * 60 + (endMinute - currentMinute);
+                        lesson.querySelector('td:last-child').textContent += ` (закінчиться через ${timeLeft} хв)`;
+                    } else if (currentHour >= startHour && currentHour <= endHour) {
+                        lessonsEnded = false;
+                        const timeUntilNextLesson = (startHour - currentHour) * 60 + (startMinute - currentMinute);
+                        const breakInfoRow = document.createElement('tr');
+                        breakInfoRow.classList.add('break-info');
+                        breakInfoRow.innerHTML = `<td colspan="3">Зараз перерва, залишилось ${timeUntilNextLesson} хв</td>`;
+                        lesson.parentNode.insertBefore(breakInfoRow, lesson);
+                    }
+                }
+            });
+
+            if (lessonsEnded && activeScheduleWrapper.id !== 'bell-schedule' && activeScheduleWrapper.id !== 'all') {
+                // Додавання повідомлення "Уроки закінчилися" тільки для окремих днів
+                const noLessonsRow = document.createElement('tr');
+                noLessonsRow.classList.add('no-lessons');
+                noLessonsRow.innerHTML = `<td colspan="3">Уроки на сьогодні закінчилися</td>`;
+                activeScheduleWrapper.querySelector('.schedule tbody').appendChild(noLessonsRow);
+            }
+        }
     </script>
 </body>
+
 </html>
