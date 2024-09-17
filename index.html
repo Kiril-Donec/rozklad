@@ -25,9 +25,10 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 10px;
+            /* Зменшено відступи для мобільних */
+            padding: 10px;
+            /* Зменшено відступи для мобільних */
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
@@ -38,27 +39,33 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
-            font-size: 2.5em;
+            margin-bottom: 10px;
+            /* Зменшено відступ для мобільних */
+            font-size: 2em;
+            /* Зменшено розмір шрифту для мобільних */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .tabs {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            /* Зменшено відступ для мобільних */
             border-bottom: 2px solid #ddd;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
         .tab {
-            padding: 10px 15px;
+            padding: 8px 12px;
+            /* Зменшено відступи для мобільних */
             cursor: pointer;
             color: #555;
             border-bottom: 2px solid transparent;
             transition: border-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
             white-space: nowrap;
+            font-size: 0.9em;
+            /* Зменшено розмір шрифту для мобільних */
             position: relative;
         }
 
@@ -117,12 +124,15 @@
             /* Розклад займає всю ширину контейнера */
             table-layout: fixed;
             /* Фіксована ширина стовпців */
+            font-size: 0.9em;
+            /* Зменшено розмір шрифту для мобільних */
         }
 
         .schedule th,
         .schedule td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 8px;
+            /* Зменшено відступи для мобільних */
             text-align: left;
             overflow: hidden;
             /* Приховуємо текст, що виходить за межі комірки */
@@ -138,7 +148,8 @@
         }
 
         .lesson-time {
-            font-size: 0.9em;
+            font-size: 0.8em;
+            /* Зменшено розмір шрифту для мобільних */
             color: #777;
         }
 
@@ -149,7 +160,8 @@
             padding: 2px 5px;
             border-radius: 4px;
             margin-right: 5px;
-            font-size: 0.8em;
+            font-size: 0.7em;
+            /* Зменшено розмір шрифту для мобільних */
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
@@ -162,12 +174,16 @@
             background-color: #fff3e0;
             font-style: italic;
             animation: slide-in 0.5s ease;
+            font-size: 0.9em;
+            /* Зменшено розмір шрифту для мобільних */
         }
 
         .no-lessons {
             text-align: center;
             font-style: italic;
             color: #777;
+            font-size: 0.9em;
+            /* Зменшено розмір шрифту для мобільних */
         }
 
         /* Bell Schedule Styling */
@@ -193,39 +209,23 @@
 
         /* Адаптація під мобільні пристрої */
         @media (max-width: 768px) {
+
             .container {
-                margin: 10px;
+                margin: 5px;
+                /* Зменшено відступи для мобільних */
+                padding: 5px;
+                /* Зменшено відступи для мобільних */
             }
 
             .tabs {
                 flex-wrap: wrap;
+                /* Дозволяємо вкладкам переноситися на новий рядок */
                 justify-content: flex-start;
             }
 
             .tab {
-                margin-bottom: 10px;
-            }
-
-            .schedule th,
-            .schedule td {
-                padding: 5px;
-                /* Зменшено відступи */
-                font-size: 0.9em;
-                /* Зменшено розмір шрифту */
-            }
-
-            .lesson-list li span {
-                padding: 3px 5px;
-                /* Зменшено відступи */
-                font-size: 0.8em;
-                /* Зменшено розмір шрифту */
-            }
-
-            .lesson-list li:before {
-                margin-right: 5px;
-                /* Зменшено відступ */
-                font-size: 0.8em;
-                /* Зменшено розмір шрифту */
+                margin-bottom: 5px;
+                /* Додаємо відступ між вкладками */
             }
         }
 
@@ -304,11 +304,11 @@
         <h1>Розклад уроків 8-Г</h1>
         <div class="tabs">
             <div class="tab active" data-target="all">Всі</div>
-            <div class="tab" data-target="monday">Понеділок</div>
-            <div class="tab" data-target="tuesday">Вівторок</div>
-            <div class="tab" data-target="wednesday">Середа</div>
-            <div class="tab" data-target="thursday">Четвер</div>
-            <div class="tab" data-target="friday">П'ятниця</div>
+            <div class="tab" data-target="monday">Пн</div>
+            <div class="tab" data-target="tuesday">Вт</div>
+            <div class="tab" data-target="wednesday">Ср</div>
+            <div class="tab" data-target="thursday">Чт</div>
+            <div class="tab" data-target="friday">Пт</div>
             <div class="tab" data-target="bell-schedule">Дзвінки</div>
         </div>
 
@@ -344,7 +344,7 @@
                     lessonCounter = index + 1; // Встановлюємо початкове значення лічильника
                     firstLessonFound = true;
                 }
-                
+
                 if (firstLessonFound) {
                     const row = tbody.insertRow();
                     row.insertCell().textContent = lessonCounter; // Використовуємо лічильник уроків
