@@ -1,0 +1,74 @@
+{
+    "monday": [
+      { "lesson": 1, "subject": "ДС Географія", "time": "8:30 - 9:15", "ds": true },
+      { "lesson": 2, "subject": "ДС Біологія", "time": "9:20 - 10:05", "ds": true },
+      { "lesson": 3, "subject": "ДС Фізкультура", "time": "10:15 - 11:00", "ds": true },
+      { "lesson": 4, "subject": "", "time": "11:10 - 11:55", "ds": false },
+      { "lesson": 5, "subject": "", "time": "12:05 - 12:50", "ds": false },
+      { "lesson": 6, "subject": "Англ мова", "time": "13:15 - 14:00", "ds": false },
+      { "lesson": 7, "subject": "Алгебра", "time": "14:05 - 14:50", "ds": false },
+      { "lesson": 8, "subject": "Українська мова", "time": "15:00 - 15:45", "ds": false },
+      { "lesson": 9, "subject": "Зарубіжна література", "time": "15:55 - 16:40", "ds": false },
+      { "lesson": 10, "subject": "Історія України", "time": "16:50 - 17:35", "ds": false }
+    ],
+    "tuesday": [
+      { "lesson": 1, "subject": "", "time": "8:30 - 9:15", "ds": false },
+      { "lesson": 2, "subject": "ДС Інформатика", "time": "9:20 - 10:05", "ds": true },
+      { "lesson": 3, "subject": "", "time": "10:15 - 11:00", "ds": false },
+      { "lesson": 4, "subject": "ДС Фізкультура", "time": "11:10 - 11:55", "ds": true },
+      { "lesson": 5, "subject": "", "time": "12:05 - 12:50", "ds": false },
+      { "lesson": 6, "subject": "Українська література", "time": "13:15 - 14:00", "ds": false },
+      { "lesson": 7, "subject": "Алгебра", "time": "14:05 - 14:50", "ds": false },
+      { "lesson": 8, "subject": "Українська мова", "time": "15:00 - 15:45", "ds": false },
+      { "lesson": 9, "subject": "Географія", "time": "15:55 - 16:40", "ds": false },
+      { "lesson": 10, "subject": "Англ мова", "time": "16:50 - 17:35", "ds": false }
+    ],
+    "wednesday": [
+      { "lesson": 1, "subject": "", "time": "8:30 - 9:15", "ds": false },
+      { "lesson": 2, "subject": "", "time": "9:20 - 10:05", "ds": false },
+      { "lesson": 3, "subject": "", "time": "10:15 - 11:00", "ds": false },
+      { "lesson": 4, "subject": "ДС Трудове навчання", "time": "11:10 - 11:55", "ds": true },
+      { "lesson": 5, "subject": "", "time": "12:05 - 12:50", "ds": false },
+      { "lesson": 6, "subject": "Інформатика", "time": "13:15 - 14:00", "ds": false },
+      { "lesson": 7, "subject": "Фізика", "time": "14:05 - 14:50", "ds": false },
+      { "lesson": 8, "subject": "Польська мова", "time": "15:00 - 15:45", "ds": false },
+      { "lesson": 9, "subject": "Всесвітня історія", "time": "15:55 - 16:40", "ds": false },
+      { "lesson": 10, "subject": "Зарубіжна література", "time": "16:50 - 17:35", "ds": false }
+    ],
+    "thursday": [
+      { "lesson": 1, "subject": "", "time": "8:30 - 9:15", "ds": false },
+      { "lesson": 2, "subject": "ДС Мистецтво", "time": "9:20 - 10:05", "ds": true },
+      { "lesson": 3, "subject": "ДС Хімія", "time": "10:15 - 11:00", "ds": true },
+      { "lesson": 4, "subject": "A: ДС Польська мова\nB: ДС Історія України", "time": "11:10 - 11:55", "ds": true },
+      { "lesson": 5, "subject": "", "time": "12:05 - 12:50", "ds": false },
+      { "lesson": 6, "subject": "Геометрія", "time": "13:15 - 14:00", "ds": false },
+      { "lesson": 7, "subject": "Фізкультура", "time": "14:05 - 14:50", "ds": false },
+      { "lesson": 8, "subject": "Українська мова", "time": "15:00 - 15:45", "ds": false },
+      { "lesson": 9, "subject": "Англ мова", "time": "15:55 - 16:40", "ds": false },
+      { "lesson": 10, "subject": "Біологія", "time": "16:50 - 17:35", "ds": false }
+    ],
+    "friday": [
+      { "lesson": 1, "subject": "", "time": "8:30 - 9:15", "ds": false },
+      { "lesson": 2, "subject": "ДС Основи здоров'я", "time": "9:20 - 10:05", "ds": true },
+      { "lesson": 3, "subject": "", "time": "10:15 - 11:00", "ds": false },
+      { "lesson": 4, "subject": "ДС Фізика", "time": "11:10 - 11:55", "ds": true },
+      { "lesson": 5, "subject": "", "time": "12:05 - 12:50", "ds": false },
+      { "lesson": 6, "subject": "Алгебра", "time": "13:15 - 14:00", "ds": false },
+      { "lesson": 7, "subject": "Геометрія", "time": "14:05 - 14:50", "ds": false },
+      { "lesson": 8, "subject": "Польська мова", "time": "15:00 - 15:45", "ds": false },
+      { "lesson": 9, "subject": "Хімія", "time": "15:55 - 16:40", "ds": false },
+      { "lesson": 10, "subject": "Українська література", "time": "16:50 - 17:35", "ds": false }
+    ],
+    "bellSchedule": [
+        { "lesson": 1, "time": "8:30 - 9:15", "break": "5 хв" },
+        { "lesson": 2, "time": "9:20 - 10:05", "break": "10 хв" },
+        { "lesson": 3, "time": "10:15 - 11:00", "break": "10 хв" },
+        { "lesson": 4, "time": "11:10 - 11:55", "break": "10 хв" },
+        { "lesson": 5, "time": "12:05 - 12:50", "break": "" },
+        { "lesson": 6, "time": "12:55 - 13:40", "break": "5 хв" },
+        { "lesson": 7, "time": "13:45 - 14:30", "break": "10 хв" },
+        { "lesson": 8, "time": "14:40 - 15:25", "break": "10 хв" },
+        { "lesson": 9, "time": "15:35 - 16:20", "break": "10 хв" },
+        { "lesson": 10, "time": "16:30 - 17:15", "break": "-" }
+      ]
+  }
