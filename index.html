@@ -90,32 +90,36 @@
         }
 
         .schedule-wrapper.slide-in-left {
-            animation: slide-in-left 0.3s ease-in-out;
+            animation: slide-in-left 0.5s ease-in-out;
             /* Змінено тривалість та easing */
         }
 
         .schedule-wrapper.slide-in-right {
-            animation: slide-in-right 0.3s ease-in-out;
+            animation: slide-in-right 0.5s ease-in-out;
             /* Змінено тривалість та easing */
         }
 
         @keyframes slide-in-left {
-            from {
+            0% {
                 transform: translateX(-100%);
+                opacity: 0;
             }
 
-            to {
+            100% {
                 transform: translateX(0);
+                opacity: 1;
             }
         }
 
         @keyframes slide-in-right {
-            from {
+            0% {
                 transform: translateX(100%);
+                opacity: 0;
             }
 
-            to {
+            100% {
                 transform: translateX(0);
+                opacity: 1;
             }
         }
 
@@ -140,6 +144,12 @@
             /* Додаємо три крапки в кінці тексту */
             white-space: nowrap;
             /* Забороняємо перенос тексту на новий рядок */
+        }
+
+        /* Зменшено ширину стовпчика нумерації */
+        .schedule th:first-child,
+        .schedule td:first-child {
+            width: 5%; 
         }
 
         .schedule th {
@@ -168,22 +178,6 @@
         .current-lesson {
             background-color: #e0f7fa;
             animation: pulse 1.5s infinite alternate;
-        }
-
-        .break-info {
-            background-color: #fff3e0;
-            font-style: italic;
-            animation: slide-in 0.5s ease;
-            font-size: 0.9em;
-            /* Зменшено розмір шрифту для мобільних */
-        }
-
-        .no-lessons {
-            text-align: center;
-            font-style: italic;
-            color: #777;
-            font-size: 0.9em;
-            /* Зменшено розмір шрифту для мобільних */
         }
 
         /* Bell Schedule Styling */
@@ -296,6 +290,20 @@
             margin-bottom: 10px;
             /* Невеликий відступ знизу */
         }
+
+        /* Стиль для годинника */
+        #clock {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Стиль для повідомлення "Скоро уроки" */
+        .before-lessons {
+            background-color: #e0f7fa;
+            font-style: italic;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -332,7 +340,7 @@
             const thead = table.createTHead();
             const tbody = table.createTBody();
             const headerRow = thead.insertRow();
-            headerRow.insertCell().textContent = 'Урок';
+            headerRow.insertCell().textContent = '№'; // Змінено на "№"
             headerRow.insertCell().textContent = 'Предмет';
             headerRow.insertCell().textContent = 'Час';
 
@@ -504,57 +512,86 @@
             });
         });
 
-        // Оновлення інформації про поточний урок/перерву кожну хвилину
-        setInterval(updateCurrentLessonInfo, 60000);
+        // Оновлення часу в реальному часі
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
 
+        // Оновлення інформації про поточний урок/перерву та часу
         function updateCurrentLessonInfo() {
             const now = new Date();
+            const currentDay = now.getDay();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
 
             const activeScheduleWrapper = document.querySelector('.schedule-wrapper.active');
             const lessons = activeScheduleWrapper.querySelectorAll('.schedule tbody tr:not(.day-name)');
-            let lessonsEnded = true;
 
             // Видалення старих повідомлень
-            activeScheduleWrapper.querySelectorAll('.break-info').forEach(row => row.remove());
-            activeScheduleWrapper.querySelectorAll('.no-lessons').forEach(row => row.remove());
+            activeScheduleWrapper.querySelectorAll('.before-lessons').forEach(row => row.remove()); // Видалення повідомлення про початок уроків
 
-            lessons.forEach(lesson => {
-                lesson.classList.remove('current-lesson');
-                const timeParts = lesson.querySelector('td:last-child').textContent.split(' - ');
+            if (currentDay !== 0 && currentDay !== 6 && currentHour >= 5 && currentHour < 6) {
+                // Додавання повідомлення "Уроки скоро" з 5 до 6 ранку, якщо не субота/неділя
+                const beforeLessonsRow = document.createElement('tr');
+                beforeLessonsRow.classList.add('before-lessons');
+                beforeLessonsRow.innerHTML = `<td colspan="3">Уроки скоро</td>`;
+                activeScheduleWrapper.querySelector('.schedule tbody').insertBefore(beforeLessonsRow, activeScheduleWrapper.querySelector('.schedule tbody tr:first-child'));
+            } else {
+                // Повідомлення про початок уроків за 30 хвилин
+                if (currentDay !== 0 && currentDay !== 6) {
+                    const firstLesson = lessons[0];
+                    if (firstLesson) {
+                        const timeParts = firstLesson.querySelector('td:last-child').textContent.split(' - ');
+                        if (timeParts.length === 2) {
+                            const startHour = parseInt(timeParts[0].split(':')[0]);
+                            const startMinute = parseInt(timeParts[0].split(':')[1]);
 
-                if (timeParts.length === 2) {
-                    const startHour = parseInt(timeParts[0].split(':')[0]);
-                    const startMinute = parseInt(timeParts[0].split(':')[1]);
-                    const endHour = parseInt(timeParts[1].split(':')[0]);
-                    const endMinute = parseInt(timeParts[1].split(':')[1]);
-
-                    if (currentHour >= startHour && currentMinute >= startMinute && currentHour <= endHour && currentMinute <= endMinute) {
-                        lesson.classList.add('current-lesson');
-                        lessonsEnded = false;
-
-                        const timeLeft = (endHour - currentHour) * 60 + (endMinute - currentMinute);
-                        lesson.querySelector('td:last-child').textContent += ` (закінчиться через ${timeLeft} хв)`;
-                    } else if (currentHour >= startHour && currentHour <= endHour) {
-                        lessonsEnded = false;
-                        const timeUntilNextLesson = (startHour - currentHour) * 60 + (startMinute - currentMinute);
-                        const breakInfoRow = document.createElement('tr');
-                        breakInfoRow.classList.add('break-info');
-                        breakInfoRow.innerHTML = `<td colspan="3">Зараз перерва, залишилось ${timeUntilNextLesson} хв</td>`;
-                        lesson.parentNode.insertBefore(breakInfoRow, lesson);
+                            const timeUntilFirstLesson = (startHour - currentHour) * 60 + (startMinute - currentMinute);
+                            if (timeUntilFirstLesson <= 30 && timeUntilFirstLesson > 0) {
+                                const beforeLessonsRow = document.createElement('tr');
+                                beforeLessonsRow.classList.add('before-lessons');
+                                beforeLessonsRow.innerHTML = `<td colspan="3">Через ${timeUntilFirstLesson} хв починаються уроки</td>`;
+                                activeScheduleWrapper.querySelector('.schedule tbody').insertBefore(beforeLessonsRow, activeScheduleWrapper.querySelector('.schedule tbody tr:first-child'));
+                            }
+                        }
                     }
                 }
-            });
 
-            if (lessonsEnded && activeScheduleWrapper.id !== 'bell-schedule' && activeScheduleWrapper.id !== 'all') {
-                // Додавання повідомлення "Уроки закінчилися" тільки для окремих днів
-                const noLessonsRow = document.createElement('tr');
-                noLessonsRow.classList.add('no-lessons');
-                noLessonsRow.innerHTML = `<td colspan="3">Уроки на сьогодні закінчилися</td>`;
-                activeScheduleWrapper.querySelector('.schedule tbody').appendChild(noLessonsRow);
+                lessons.forEach((lesson, index) => {
+                    lesson.classList.remove('current-lesson');
+                    const timeParts = lesson.querySelector('td:last-child').textContent.split(' - ');
+
+                    if (timeParts.length === 2) {
+                        const startHour = parseInt(timeParts[0].split(':')[0]);
+                        const startMinute = parseInt(timeParts[0].split(':')[1]);
+                        const endHour = parseInt(timeParts[1].split(':')[0]);
+                        const endMinute = parseInt(timeParts[1].split(':')[1]);
+
+                        if (currentHour >= startHour && currentMinute >= startMinute && currentHour <= endHour && currentMinute <= endMinute) {
+                            lesson.classList.add('current-lesson');
+
+                            const timeLeft = (endHour - currentHour) * 60 + (endMinute - currentMinute);
+                            lesson.querySelector('td:last-child').textContent += ` (закінчиться через ${timeLeft} хв)`;
+                        } 
+                    }
+                });
+
             }
+
+            updateClock(); // Оновлення часу
         }
+
+        // Оновлення інформації про поточний урок/перерву та часу кожну секунду
+        setInterval(updateCurrentLessonInfo, 1000);
+
+        // Додавання елемента для відображення часу
+        const clockElement = document.createElement('div');
+        clockElement.id = 'clock';
+        document.body.appendChild(clockElement);
     </script>
 </body>
 
