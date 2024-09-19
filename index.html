@@ -79,46 +79,84 @@
         }
 
         .schedule-wrapper {
-            position: relative;
+            position: absolute;
+            /* Змінено на absolute для позиціонування */
+            width: 100%;
             opacity: 0;
-            /* Початково приховуємо всі розклади */
-            transition: opacity 0.5s ease;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease, left 0.5s ease;
+            /* Додано left */
         }
 
         .schedule-wrapper.active {
             opacity: 1;
+            transform: scale(1);
+            left: 0;
+            /* Початкове положення */
         }
 
-        .schedule-wrapper.slide-in-left {
-            animation: slide-in-left 0.5s ease-in-out;
-            /* Змінено тривалість та easing */
+        .schedule-wrapper.slide-out-left {
+            animation: slide-out-left 0.5s ease-in-out forwards;
+            /* Додано forwards */
         }
 
         .schedule-wrapper.slide-in-right {
-            animation: slide-in-right 0.5s ease-in-out;
-            /* Змінено тривалість та easing */
+            animation: slide-in-right 0.5s ease-in-out forwards;
+            /* Додано forwards */
         }
 
-        @keyframes slide-in-left {
-            0% {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
+        .schedule-wrapper.slide-out-right {
+            animation: slide-out-right 0.5s ease-in-out forwards;
+            /* Додано forwards */
+        }
 
-            100% {
-                transform: translateX(0);
-                opacity: 1;
+        .schedule-wrapper.slide-in-left {
+            animation: slide-in-left 0.5s ease-in-out forwards;
+            /* Додано forwards */
+        }
+
+        @keyframes slide-out-left {
+            to {
+                left: -100%;
+                transform: scale(0.8) translateX(20%);
+                /* Додано зменшення та зсув */
+                opacity: 0;
             }
         }
 
         @keyframes slide-in-right {
-            0% {
-                transform: translateX(100%);
+            from {
+                left: 100%;
+                transform: scale(0.9);
                 opacity: 0;
             }
 
-            100% {
-                transform: translateX(0);
+            to {
+                left: 0;
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide-out-right {
+            to {
+                left: 100%;
+                transform: scale(0.8) translateX(-20%);
+                /* Додано зменшення та зсув */
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-in-left {
+            from {
+                left: -100%;
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                left: 0;
+                transform: scale(1);
                 opacity: 1;
             }
         }
@@ -130,31 +168,41 @@
             /* Фіксована ширина стовпців */
             font-size: 0.9em;
             /* Зменшено розмір шрифту для мобільних */
+            border-collapse: separate;
+            border-spacing: 5px;
+            border-radius: 15px;
+            overflow: hidden;
         }
 
         .schedule th,
         .schedule td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            /* Зменшено відступи для мобільних */
+            border: none;
+            /* Видаляємо стандартні рамки */
+            padding: 12px 15px;
             text-align: left;
-            overflow: hidden;
-            /* Приховуємо текст, що виходить за межі комірки */
-            text-overflow: ellipsis;
-            /* Додаємо три крапки в кінці тексту */
-            white-space: nowrap;
-            /* Забороняємо перенос тексту на новий рядок */
+            background-color: #f8f9fa;
+            /* Світло-сірий фон */
+            border-radius: 10px;
         }
 
         /* Зменшено ширину стовпчика нумерації */
         .schedule th:first-child,
         .schedule td:first-child {
-            width: 5%; 
+            width: 3%;
+            text-align: center;
         }
 
         .schedule th {
-            background-color: #f0f0f0;
+            background-color: #e9ebee;
+            /* Трохи темніший сірий фон для заголовків */
             font-weight: bold;
+            color: #4b5563;
+            /* Темно-сірий колір тексту */
+        }
+
+        .schedule tr:nth-child(even) td {
+            background-color: #f3f4f6;
+            /* Ще світліший сірий фон для парних рядків */
         }
 
         .lesson-time {
@@ -166,12 +214,19 @@
         .ds-label {
             display: inline-block;
             background-color: #007bff;
+            /* Синій фон */
             color: #fff;
-            padding: 2px 5px;
-            border-radius: 4px;
-            margin-right: 5px;
-            font-size: 0.7em;
-            /* Зменшено розмір шрифту для мобільних */
+            /* Білий текст */
+            padding: 3px 8px;
+            /* Збільшено відступи */
+            border-radius: 8px;
+            /* Збільшено радіус заокруглення */
+            margin-right: 8px;
+            /* Збільшено відступ справа */
+            font-size: 0.8em;
+            /* Збільшено розмір шрифту */
+            font-weight: bold;
+            /* Жирний шрифт */
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
@@ -474,15 +529,17 @@
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const target = tab.dataset.target;
+                const currentActive = document.querySelector('.schedule-wrapper.active');
+                const newActive = document.getElementById(target);
 
                 // Приховуємо всі розклади перед відображенням нового
                 scheduleWrappers.forEach(s => {
-                    s.classList.remove('active', 'slide-in-left', 'slide-in-right');
+                    s.classList.remove('active', 'slide-out-left', 'slide-in-right', 'slide-out-right', 'slide-in-left');
                     s.style.display = 'none';
                 });
 
                 // Знаходимо розклад, який потрібно відобразити
-                const newActive = document.getElementById(target);
+
 
                 // Змінюємо активну вкладку
                 tabs.forEach(t => t.classList.remove('active'));
@@ -494,20 +551,34 @@
                 // Додаємо анімацію 
                 setTimeout(() => {
                     // Використовуємо Array.from() для перетворення NodeList в масив
-                    const currentIndex = Array.from(scheduleWrappers).indexOf(newActive);
-                    const prevIndex = Array.from(scheduleWrappers).indexOf(document.querySelector('.schedule-wrapper.active'));
 
-                    if (currentIndex > prevIndex) {
-                        newActive.classList.add('slide-in-right');
+                    if (currentActive) {
+                        const currentIndex = Array.from(scheduleWrappers).indexOf(newActive);
+                        const prevIndex = Array.from(scheduleWrappers).indexOf(currentActive);
+
+                        if (currentIndex > prevIndex) {
+                            currentActive.classList.add('slide-out-left');
+                            newActive.classList.add('slide-in-right');
+                        } else {
+                            currentActive.classList.add('slide-out-right'); // Зміна напрямку
+                            newActive.classList.add('slide-in-left'); // Зміна напрямку
+                        }
+
+
+                        // Додавання класу 'active' після завершення анімації
+                        currentActive.addEventListener('animationend', () => {
+                            currentActive.classList.remove('active', 'slide-out-left', 'slide-out-right');
+                        }, { once: true });
+
+                        newActive.addEventListener('animationend', () => {
+                            newActive.classList.add('active');
+                            newActive.classList.remove('slide-in-right', 'slide-in-left');
+                            updateCurrentLessonInfo(); // Оновлення інформації про урок/перерву
+                        }, { once: true });
                     } else {
-                        newActive.classList.add('slide-in-left');
-                    }
-
-                    // Додавання класу 'active' після завершення анімації
-                    newActive.addEventListener('animationend', () => {
                         newActive.classList.add('active');
-                        updateCurrentLessonInfo(); // Оновлення інформації про урок/перерву
-                    }, { once: true }); // Виконати обробник події тільки один раз
+                        updateCurrentLessonInfo();
+                    }
                 }, 0); // Затримка для коректної роботи анімації 
             });
         });
@@ -576,7 +647,7 @@
 
                             const timeLeft = (endHour - currentHour) * 60 + (endMinute - currentMinute);
                             lesson.querySelector('td:last-child').textContent += ` (закінчиться через ${timeLeft} хв)`;
-                        } 
+                        }
                     }
                 });
 
